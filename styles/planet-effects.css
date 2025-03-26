@@ -1,0 +1,260 @@
+/* 
+ * 行星效果样式
+ * 这个文件包含行星展示的效果和动画
+ */
+
+/* 基础容器样式 */
+.planet-container {
+  position: relative;
+  transform-style: preserve-3d;
+  transform-origin: center center;
+  transition: transform 0.3s ease;
+}
+
+/* 行星光晕效果 */
+.planet-glow {
+  position: absolute;
+  inset: -25px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--glow-color), 0.3) 0%, rgba(var(--glow-color), 0) 70%);
+  filter: blur(15px);
+  opacity: 0.8;
+  z-index: -1;
+  pointer-events: none;
+  animation: pulse-glow 5s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; filter: blur(15px); }
+  50% { opacity: 0.9; filter: blur(20px); }
+}
+
+/* 轨道粒子动画 */
+@keyframes orbit {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(var(--distance, 70px));
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(var(--distance, 70px));
+  }
+}
+
+/* 大气层阴影效果 */
+.atmosphere-shadow {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    transparent 30%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  opacity: 0.6;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+/* 行星表面纹理效果 */
+.planet-texture {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-size: 200% 100%;
+  background-position: 0% 0%;
+  animation: planet-texture-animation 20s linear infinite;
+  mix-blend-mode: overlay;
+  opacity: 0.8;
+}
+
+@keyframes planet-texture-animation {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+/* Three.js Canvas容器样式 */
+.three-canvas-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.three-planet-container {
+  width: 100%;
+  height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+  overflow: hidden;
+}
+
+.three-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* 确保渲染表面居中显示 */
+canvas {
+  display: block;
+  outline: none;
+}
+
+/* 标准视图轨道圆环样式 */
+.standard-view-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: all 0.5s ease;
+}
+
+/* 左侧黑色圆环样式 */
+.black-orbit-left {
+  position: absolute;
+  top: 50%;
+  left: -50px;
+  transform: translate(-50%, -50%); 
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+  z-index: 5;
+}
+
+/* 行星数据标签样式 */
+.planet-data-label {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: white;
+  font-size: 0.875rem;
+  transform: translateZ(0);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.planet-data-label:hover {
+  transform: scale(1.05) translateZ(0);
+  border-color: rgba(var(--primary-color), 0.3);
+  box-shadow: 0 15px 30px -5px rgba(var(--primary-color), 0.2);
+}
+
+/* 右侧信息卡片样式 */
+.right-info-card {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 50;
+  width: 220px;
+}
+
+/* 添加从右侧卡片指向行星的连接线 */
+.right-info-card::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -60px;
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to left, rgba(99, 179, 237, 0.6), transparent);
+}
+
+/* 添加指示点 */
+.right-info-card::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -64px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(99, 179, 237, 0.8);
+  transform: translateY(-50%);
+  box-shadow: 0 0 8px rgba(99, 179, 237, 0.6);
+}
+
+/* 行星导航指示器样式 */
+.planet-nav-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 9999px;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.planet-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.planet-indicator.active {
+  width: 30px;
+  height: 30px;
+  background-color: var(--primary);
+  box-shadow: 0 0 15px rgba(var(--primary-color), 0.5);
+}
+
+/* 行星控制面板样式增强 */
+.planet-controls-container {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  color: white;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.planet-controls-container:hover {
+  border-color: rgba(var(--primary-color), 0.2);
+  box-shadow: 0 15px 30px -10px rgba(var(--primary-color), 0.2);
+}
+
+/* 星星闪烁效果增强 */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); filter: blur(0.5px); }
+  50% { opacity: 1; transform: scale(1.2); filter: blur(1px); }
+}
+
+/* 行星旋转动画 */
+@keyframes planet-rotate {
+  from { 
+    transform: rotate(0deg); 
+  }
+  to { 
+    transform: rotate(360deg); 
+  }
+}
+
+/* 行星脉动动画 */
+@keyframes planet-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+} 

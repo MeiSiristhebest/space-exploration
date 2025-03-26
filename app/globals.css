@@ -1,0 +1,972 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '../styles/planet-effects.css';
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 217 91% 60%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 250 91% 60%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 12 60% 50%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* 导航和滚动效果 */
+.highlight-section {
+  position: relative;
+  animation: highlight-pulse 1.5s ease-in-out;
+}
+
+@keyframes highlight-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+  50% {
+    box-shadow: 0 0 30px 10px rgba(59, 130, 246, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+}
+
+/* 导航栏项目动画效果 */
+.nav-item-indicator {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item-active {
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-item-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background-color: #3b82f6;
+  animation: nav-item-underline 0.3s forwards ease-out;
+}
+
+@keyframes nav-item-underline {
+  to {
+    width: 70%;
+  }
+}
+
+/* 平滑滚动指示器 */
+.scroll-smooth-indicator {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.scroll-indicator-item {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.scroll-indicator-item:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.2);
+}
+
+.scroll-indicator-item.active {
+  background-color: rgba(59, 130, 246, 0.8);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+}
+
+.glow {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.planet-card {
+  backdrop-filter: blur(16px);
+  background: rgba(15, 15, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.planet-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--primary), transparent);
+}
+
+.star {
+  position: absolute;
+  background-color: #fff;
+  border-radius: 50%;
+  animation: twinkle var(--duration) ease-in-out infinite;
+  opacity: 0;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(59, 130, 246, 0.8);
+  z-index: 1;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: var(--opacity);
+    transform: scale(1.2);
+  }
+}
+
+.large-star {
+  background-color: #f0f8ff; 
+  box-shadow: 0 0 15px #fff, 0 0 30px rgba(59, 130, 246, 1), 0 0 40px rgba(59, 130, 246, 0.8);
+  animation: pulse 3s ease-in-out infinite alternate;
+  z-index: 2;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: var(--opacity);
+    transform: scale(1);
+    box-shadow: 0 0 15px #fff, 0 0 30px rgba(59, 130, 246, 1);
+  }
+  100% {
+    opacity: var(--opacity);
+    transform: scale(1.5);
+    box-shadow: 0 0 20px #fff, 0 0 40px rgba(59, 130, 246, 1), 0 0 60px rgba(59, 130, 246, 0.6);
+  }
+}
+
+.shooting-star {
+  position: absolute;
+  width: 4px !important;
+  height: 4px !important;
+  background: linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0.4), transparent);
+  transform-origin: left;
+  animation: shooting-star var(--speed) linear infinite;
+  animation-delay: var(--delay);
+  transform: rotate(var(--angle)) translateX(-200px);
+  opacity: 0;
+  z-index: 2;
+  box-shadow: 0 0 10px #fff, 0 0 20px rgba(59, 130, 246, 0.8);
+}
+
+@keyframes shooting-star {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateX(-200px);
+    width: 4px;
+  }
+  1% {
+    opacity: 1;
+    width: 20px;
+  }
+  10% {
+    opacity: 1;
+    width: 100px;
+  }
+  20%, 100% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateX(calc(100vw + 300px));
+    width: 200px;
+  }
+}
+
+.pulsar {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  animation: pulsar 8s infinite;
+  z-index: 1;
+}
+
+@keyframes pulsar {
+  0%, 100% {
+    box-shadow: 0 0 20px 2px rgba(59, 130, 246, 0.3),
+                0 0 40px 5px rgba(59, 130, 246, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 50px 15px rgba(59, 130, 246, 0.5),
+                0 0 100px 30px rgba(59, 130, 246, 0.3);
+    transform: scale(1.5);
+  }
+}
+
+.nebula-background {
+  position: fixed;
+  width: 120%;
+  height: 120%;
+  left: -10%;
+  top: -10%;
+  background: 
+    radial-gradient(ellipse at 20% 30%, rgba(59, 130, 246, 0.15) 0%, rgba(0, 0, 0, 0) 50%),
+    radial-gradient(ellipse at 80% 30%, rgba(147, 51, 234, 0.1) 0%, rgba(0, 0, 0, 0) 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(236, 72, 153, 0.1) 0%, rgba(0, 0, 0, 0) 50%);
+  opacity: 1;
+  z-index: 0;
+  animation: nebula-animation 60s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes nebula-animation {
+  0% {
+    transform: translate(-5%, -5%) scale(1);
+  }
+  50% {
+    transform: translate(5%, 5%) scale(1.1);
+  }
+  100% {
+    transform: translate(-5%, 5%) scale(1);
+  }
+}
+
+.cosmic-dust {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+}
+
+.parallax {
+  will-change: transform;
+}
+
+.scroll-indicator {
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+.planet-image-container {
+  position: relative;
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.4), inset 0 0 20px rgba(0, 0, 0, 0.8);
+  transform: translateZ(0);
+}
+
+.planet-atmosphere {
+  background: radial-gradient(circle at center, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.01) 70%, transparent 100%);
+  filter: blur(10px);
+  opacity: 0.6;
+  animation: rotate 120s linear infinite;
+}
+
+.planet-surface {
+  box-shadow: inset 5px -5px 20px rgba(0, 0, 0, 0.7);
+  background-size: cover !important;
+}
+
+.planet-texture {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='rgba(255,255,255,.03)' fill-rule='evenodd'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.7;
+}
+
+.planet-highlight {
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 10s ease-in-out infinite;
+}
+
+/* 为不同的行星添加特定样式 */
+[data-planet-index="0"] .planet-surface {
+  filter: hue-rotate(0deg) saturate(1.2);
+}
+
+[data-planet-index="1"] .planet-surface {
+  filter: hue-rotate(60deg) saturate(0.9);
+}
+
+[data-planet-index="2"] .planet-surface {
+  filter: hue-rotate(180deg) saturate(1.1);
+}
+
+[data-planet-index="3"] .planet-surface {
+  filter: hue-rotate(240deg) saturate(1.4);
+}
+
+/* 行星视觉效果增强 */
+@keyframes animate-spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animate-pulse-slow {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.planet-core {
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  box-shadow: inset 10px -10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.planet-surface {
+  mix-blend-mode: overlay;
+  opacity: 0.8;
+  transform: translateZ(0);
+  box-shadow: inset 5px -5px 40px rgba(0, 0, 0, 0.5);
+}
+
+.planet-atmosphere {
+  opacity: 0.6;
+  mix-blend-mode: screen;
+  transform: translateZ(0);
+  filter: blur(5px);
+}
+
+.planet-terrain {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: overlay;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.planet-clouds {
+  mix-blend-mode: overlay;
+}
+
+@keyframes planet-pulse {
+  0%, 100% {
+    box-shadow: 0 0 40px rgba(56, 189, 248, 0.4), 
+                inset 5px -5px 50px rgba(0, 0, 0, 0.4);
+    opacity: 0.7;
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(56, 189, 248, 0.6), 
+                inset 5px -5px 50px rgba(0, 0, 0, 0.4);
+    opacity: 0.9;
+  }
+}
+
+@keyframes planet-rotate {
+  0% {
+    background-position: 0% 50%;
+    transform: rotate(0deg);
+  }
+  100% {
+    background-position: 100% 50%;
+    transform: rotate(360deg);
+  }
+}
+
+.planet-ring-container {
+  opacity: 0.8;
+  transition: all 0.5s ease;
+}
+
+.planet-ring-container:hover {
+  opacity: 1;
+  transform: rotate(-15deg) scale(1.02);
+}
+
+/* 增强的粒子和大气效果 */
+.atmosphere-particle {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  filter: blur(1px);
+  animation: float-particle var(--duration, 10s) linear infinite;
+  opacity: var(--opacity, 0.5);
+}
+
+@keyframes float-particle {
+  0% {
+    transform: rotate(0deg) translateX(var(--distance)) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(var(--distance)) rotate(-360deg);
+  }
+}
+
+/* 增强行星表面纹理 */
+.surface-feature {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: overlay;
+  opacity: 0.7;
+  filter: blur(2px);
+}
+
+.rocky-texture {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.15' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  opacity: 0.4;
+}
+
+.gas-bands {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(0, 0, 0, 0.1) 7%,
+    rgba(255, 255, 255, 0.05) 10%,
+    rgba(0, 0, 0, 0.05) 14%
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
+
+/* 宇宙尺度视觉效果 */
+.scale-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.scale-item-planck {
+  background: radial-gradient(circle at 25% 25%, #BE185D 0%, #831843 100%);
+}
+
+.scale-item-nucleus {
+  background: radial-gradient(circle at 27% 27%, #B91C1C 0%, #7F1D1D 100%);
+}
+
+.scale-item-atomic {
+  background: radial-gradient(circle at 30% 30%, #EF4444 0%, #7F1D1D 100%);
+}
+
+.scale-item-bacteria {
+  background: radial-gradient(circle at 33% 33%, #F59E0B 0%, #92400E 100%);
+}
+
+.scale-item-micro {
+  background: radial-gradient(circle at 35% 35%, #F97316 0%, #7C2D12 100%);
+}
+
+.scale-item-human {
+  background: radial-gradient(circle at 40% 40%, #3B82F6 0%, #1E3A8A 100%);
+}
+
+.scale-item-earth {
+  background: radial-gradient(circle at 45% 45%, #2563EB 0%, #1E3A8A 100%);
+}
+
+.scale-item-solar {
+  background: radial-gradient(circle at 50% 50%, #7C3AED 0%, #4C1D95 100%);
+}
+
+.scale-item-galactic {
+  background: radial-gradient(circle at 55% 55%, #8B5CF6 0%, #4C1D95 100%);
+}
+
+.scale-item-localgroup {
+  background: radial-gradient(circle at 58% 58%, #C026D3 0%, #701A75 100%);
+}
+
+.scale-item-universe {
+  background: radial-gradient(circle at 60% 60%, #EC4899 0%, #831843 100%);
+}
+
+/* 粒子特效 */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
+  animation: move-particles 20s infinite linear;
+}
+
+@keyframes move-particles {
+  0% { background-position: 0 0; }
+  100% { background-position: 100px 100px; }
+}
+
+/* 增强的数据可视化样式 */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.6);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+.chart-tooltip {
+  position: absolute;
+  background-color: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: white;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  max-width: 250px;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.bar-chart-item {
+  position: relative;
+  height: 100%;
+  transition: all 0.5s ease;
+}
+
+.bar-chart-item:hover {
+  filter: brightness(1.2);
+  transform: translateY(-5px);
+}
+
+.bar-chart-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, 
+    rgba(255, 255, 255, 0.2) 0%, 
+    rgba(255, 255, 255, 0) 70%);
+}
+
+.pie-slice {
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pie-slice:hover {
+  transform: translateX(10px) translateY(-10px);
+  filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+}
+
+.pie-slice-label {
+  opacity: 0.8;
+  transition: opacity 0.3s ease, font-size 0.3s ease;
+}
+
+.pie-slice-label:hover {
+  opacity: 1;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.timeline-node {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.timeline-node:hover {
+  transform: scale(1.5);
+  filter: brightness(1.3);
+}
+
+.timeline-connector {
+  stroke-dasharray: 5;
+  animation: dash 20s linear infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
+
+/* 宇宙尺度环形特效 */
+.scale-ring {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+  border: 1px solid currentColor;
+  transform-origin: center center;
+  animation: scale-pulse 3s infinite alternate ease-in-out;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.scale-ring:hover {
+  opacity: 1;
+  filter: brightness(1.5) drop-shadow(0 0 10px currentColor);
+  transform: scale(1.05);
+}
+
+@keyframes scale-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+/* 空间数据卡片增强效果 */
+.space-data-card {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.space-data-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.25);
+}
+
+/* 数据可视化标记点动画 */
+.data-point {
+  position: relative;
+}
+
+.data-point::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, currentColor 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  z-index: -1;
+  animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* 图表区域鼠标悬停交互提示 */
+.chart-interaction-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chart-container:hover .chart-interaction-hint {
+  opacity: 1;
+}
+
+/* 动态扫描线效果 */
+.chart-scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, 
+    transparent, 
+    rgba(59, 130, 246, 0.5) 50%, 
+    transparent 100%);
+  opacity: 0.7;
+  z-index: 10;
+  animation: scan-line 3s ease-in-out infinite alternate;
+}
+
+@keyframes scan-line {
+  0% {
+    top: 10%;
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    top: 90%;
+    opacity: 0.3;
+  }
+}
+
+/* 数据标签淡入效果 */
+.data-label {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fade-in-up 0.5s ease forwards;
+  animation-delay: calc(var(--index) * 0.1s);
+}
+
+@keyframes fade-in-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 行星3D效果和增强的视觉效果 */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.planet-3d-container {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.planet-3d-container::before {
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  opacity: 0.6;
+  filter: blur(8px);
+}
+
+/* 行星大气效果增强 */
+.atmosphere-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.planet-rotation-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* 大气层粒子动画增强 */
+@keyframes float-particle-3d {
+  0% {
+    transform: translateZ(0) rotate(0deg) translateX(var(--distance)) rotate(0deg);
+  }
+  100% {
+    transform: translateZ(10px) rotate(360deg) translateX(var(--distance)) rotate(-360deg);
+  }
+}
+
+.animate-atmosphere {
+  animation: float-particle-3d var(--duration, 30s) linear infinite;
+}
+
+/* 行星表面材质增强 */
+.planet-surface-material {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  mix-blend-mode: overlay;
+  overflow: hidden;
+}
+
+.surface-texture-rocky {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.15' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.3'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+.surface-texture-earthlike {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.1' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.2'/%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.surface-texture-gaseous {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 7%,
+    rgba(255, 255, 255, 0.05) 10%,
+    rgba(255, 255, 255, 0) 14%
+  );
+  opacity: 0.7;
+}
+
+.surface-texture-oceanic {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 100 100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.2'/%3E%3C/svg%3E");
+  opacity: 0.3;
+}
+
+/* 3D视图选择器和控制器 */
+.view-mode-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.view-mode-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: rgba(15, 15, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-mode-button:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.view-mode-button.active {
+  background: rgba(59, 130, 246, 0.3);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+/* 角度指示器 */
+.angle-indicator {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.angle-indicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 50%;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
+  transform-origin: bottom center;
+  animation: rotate-indicator 10s linear infinite;
+}
+
+@keyframes rotate-indicator {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
